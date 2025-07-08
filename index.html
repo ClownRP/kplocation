@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>KP → Apple Maps</title>
+
+<style>
+body{font-family:-apple-system,HelveticaNeue;}
+input{padding:.4em;font-size:1.1em;width:6em}
+button{padding:.4em .8em;font-size:1.1em;margin-left:.4em}
+#err{color:#d00;margin-top:.8em}
+</style>
+
+<h2>キロポストを入力</h2>
+<input id="kp" placeholder="N1.2">
+<button id="go">決定</button>
+<div id="err"></div>
+
+<script>
+/* ---------- ① キロポスト → 緯度経度 の対応表 ---------- */
+const kpTable = {
+  "N0.0":[43.07641377,141.4215056],
+  "N0.1":[43.07702793,141.4224020],
+  "N0.2":[43.07776610,141.4231020],
+  "N0.3":[43.07839110,141.4239842],
+  "N0.4":[43.07878233,141.4250899],
+  "N0.5":[43.07916986,141.4261925],
+  "N0.6":[43.07952850,141.4273187],
+  "N0.7":[43.07988717,141.4284448],
+  "N0.8":[43.08026667,141.4295639],
+  "N0.9":[43.08063333,141.4306889],
+  "N1.0":[43.08099722,141.4318083],
+  "N1.1":[43.08136111,141.4329222],
+  "N1.2":[43.08172778,141.4340500],
+  "N1.3":[43.08209167,141.4351722],
+  "N1.4":[43.08246389,141.4363111],
+  "N1.5":[43.08282778,141.4374111],
+  "N1.6":[43.08319444,141.4385389],
+  "N1.7":[43.08355000,141.4396417],
+  "N1.8":[43.08393611,141.4408222],
+  "N1.9":[43.08428056,141.4418944],
+  "N2.0":[43.08464167,141.4430056]
+};
+/* -------------------------------------------------------- */
+
+const input = document.getElementById('kp');
+const err   = document.getElementById('err');
+
+document.getElementById('go').onclick = () => {
+  const key = input.value.trim().toUpperCase();
+  const ll  = kpTable[key];
+
+  if(!ll){
+    err.textContent = '登録されていない KP です。';
+    return;
+  }
+  err.textContent = '';
+
+  /* ---------- ② Apple Maps を開く ---------- */
+  // maps: スキームは iOS/ macOS 専用。&q= でピン名を付けられる
+  const url = `maps://?ll=${ll[0]},${ll[1]}&q=${encodeURIComponent(key + ' KP')}`;
+  location.href = url;
+};
+</script>
